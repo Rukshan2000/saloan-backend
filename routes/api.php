@@ -40,7 +40,13 @@ Route::prefix('v1')->group(function () {
     Route::put('branches/{branch}', [BranchController::class, 'update']);
 
     // Get available time slots for beautician and service
-    Route::get('appointment-services/available-time-slots', action: [AppointmentServiceController::class, 'getAvailableTimeSlots']);
+    Route::get('appointment-services/available-time-slots', [AppointmentServiceController::class, 'getAvailableTimeSlots']);
+    // Find best available beautician for services
+    Route::get('appointment-services/find-best-beautician', [AppointmentServiceController::class, 'findBestBeautician']);
+    // Get all available beauticians for services
+    Route::get('appointment-services/available-beauticians', [AppointmentServiceController::class, 'getAvailableBeauticians']);
+    // Validate booking request
+    Route::post('appointment-services/validate-booking', [AppointmentServiceController::class, 'validateBooking']);
     Route::patch('branches/{branch}', [BranchController::class, 'update']);
     Route::delete('branches/{branch}', [BranchController::class, 'destroy']);
 
@@ -70,6 +76,8 @@ Route::prefix('v1')->group(function () {
 
     Route::get('appointments', [AppointmentController::class, 'index']);
     Route::post('appointments', [AppointmentController::class, 'store']);
+    // Smart booking endpoint
+    Route::post('appointments/smart-booking', [AppointmentController::class, 'storeWithSmartBooking']);
     Route::put('appointments/{appointment}', [AppointmentController::class, 'update']);
     Route::patch('appointments/{appointment}', [AppointmentController::class, 'update']);
     Route::delete('appointments/{appointment}', [AppointmentController::class, 'destroy']);
@@ -95,10 +103,12 @@ Route::prefix('v1')->group(function () {
     Route::delete('time-slots/{timeSlot}', [TimeSlotController::class, 'destroy']);
 
     Route::get('invoices', [InvoiceController::class, 'index']);
-    Route::post('invoices', [InvoiceController::class, 'store']);
-    Route::put('invoices/{invoice}', [InvoiceController::class, 'update']);
-    Route::patch('invoices/{invoice}', [InvoiceController::class, 'update']);
-    Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy']);
+    Route::get('invoices/statistics', [InvoiceController::class, 'statistics']);
+    Route::get('invoices/{id}', [InvoiceController::class, 'show']);
+    Route::post('invoices/create-from-appointment', [InvoiceController::class, 'createFromAppointment']);
+    Route::patch('invoices/{id}/status', [InvoiceController::class, 'updateStatus']);
+    Route::post('invoices/{id}/send-email', [InvoiceController::class, 'sendEmail']);
+    Route::delete('invoices/{id}', [InvoiceController::class, 'destroy']);
 
     Route::get('promotions', [PromotionController::class, 'index']);
     Route::post('promotions', [PromotionController::class, 'store']);

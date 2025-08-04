@@ -10,7 +10,7 @@ use App\Models\Invoice;
 class Appointment extends Model
 {
     protected $fillable = [
-        'customer_id', 'beautician_id', 'branch_id', 'date', 'status', 'receipt_number'
+        'customer_id', 'beautician_id', 'branch_id', 'date', 'start_time', 'end_time', 'status', 'receipt_number'
     ];
 
     public function customer()

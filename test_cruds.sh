@@ -80,3 +80,24 @@ test_api "Create Promotion" "curl -s -o /dev/null -w '%{http_code}' -X POST \"$A
 test_api "Get Promotions" "curl -s -o /dev/null -w '%{http_code}' \"$API_URL/promotions\""
 test_api "Update Promotion" "curl -s -o /dev/null -w '%{http_code}' -X PUT \"$API_URL/promotions/1\" -H \"Content-Type: application/json\" -d '{\"value\":15}'"
 test_api "Delete Promotion" "curl -s -o /dev/null -w '%{http_code}' -X DELETE \"$API_URL/promotions/1\""
+
+# Enhanced Booking Logic Tests
+echo "=== Enhanced Booking Logic Tests ==="
+
+# Test finding best beautician for services
+test_api "Find Best Beautician for Services" "curl -s -o /dev/null -w '%{http_code}' \"$API_URL/appointment-services/find-best-beautician?service_ids[]=1&service_ids[]=2&date=2025-08-05\""
+
+# Test getting available beauticians for services
+test_api "Get Available Beauticians for Services" "curl -s -o /dev/null -w '%{http_code}' \"$API_URL/appointment-services/available-beauticians?service_ids[]=1&date=2025-08-05\""
+
+# Test with branch filter
+test_api "Find Best Beautician with Branch Filter" "curl -s -o /dev/null -w '%{http_code}' \"$API_URL/appointment-services/find-best-beautician?service_ids[]=1&date=2025-08-05&branch_id=1\""
+
+# Test improved available time slots
+test_api "Get Available Time Slots (Improved)" "curl -s -o /dev/null -w '%{http_code}' \"$API_URL/appointment-services/available-time-slots?beautician_id=1&total_duration=30&date=2025-08-05\""
+
+# Smart Booking Test
+test_api "Smart Booking Appointment" "curl -s -o /dev/null -w '%{http_code}' -X POST \"$API_URL/appointments/smart-booking\" -H \"Content-Type: application/json\" -d '{\"customer_id\":1,\"service_ids\":[1,2],\"date\":\"2025-08-05\",\"branch_id\":1}'"
+
+# Validation Test
+test_api "Validate Booking Request" "curl -s -o /dev/null -w '%{http_code}' -X POST \"$API_URL/appointment-services/validate-booking\" -H \"Content-Type: application/json\" -d '{\"service_ids\":[1,2],\"date\":\"2025-08-05\",\"branch_id\":1}'"
